@@ -7,11 +7,10 @@
 </head>
 <body>
     <?php
-        include 'connection.php';
+        include 'database.php';
 
-        $sql = "SELECT * FROM users";
-        $result = pg_query($conn, $sql);
-        var_dump(pg_fetch_all($result));
+        $sql = "SELECT name, description FROM plans";
+        var_dump(fetch_assoc($sql)["description"]);
     ?>
 </body>
 </html>
