@@ -1,9 +1,13 @@
 <?php
+
+    include "database.php";
+
     session_start();
     session_unset();
 
     if(isset($_POST['email']) && isset($_POST['password']))
     {
+        loginUser($_POST['email'], $_POST['password']);
     }
 ?>
 <!DOCTYPE html>
@@ -17,7 +21,7 @@
 <body>
     <div class="h-screen flex flex-col justify-center items-center bg-amber-100 gap-2">
         <p class="text-3xl">ShortBase Login</p>
-        <form>
+        <form method="post">
             <div class="mb-4">
                 <input type="text" name="email" placeholder="Email" required/>
             </div>

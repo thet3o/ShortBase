@@ -15,9 +15,9 @@
         {
             $user = pg_fetch_assoc($result);
             if($user['pwd_hash'] == hash("sha256", $password)){
-                session_start();
                 $_SESSION['email'] = $email;
                 header("Location: dashboard.php");
+                echo "works";
             }else{
                 header("Location: login.php");
             }
