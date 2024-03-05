@@ -1,16 +1,34 @@
+<?php
+    
+    if(isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] != "/" && $_SERVER['REQUEST_URI'] != "/login.php" && $_SERVER['REQUEST_URI'] != "/signup.php" && $_SERVER['REQUEST_URI'] != "/dashboard.php")
+    {
+        include 'database.php';
+        $res = getUrl(substr($_SERVER['REQUEST_URI'], 0, 0));
+        if(!$res)
+        {
+            header("Location: $res");
+        }else{
+            echo "N";
+        }
+    }else{
+        session_start();
+        if(isset($_SESSION['email']) && $_SESSION['email'] != "")
+        {
+            header("Location: dashboard.php");
+        }else{
+            header("Location: login.php");
+        }
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Document</title>
 </head>
 <body>
-    <?php
-        include 'database.php';
-
-        $sql = "SELECT name, description FROM plans";
-        var_dump(fetch_assoc($sql)["description"]);
-    ?>
 </body>
 </html>

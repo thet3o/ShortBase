@@ -1,22 +1,32 @@
 <?php
 
-    function exec_query($sql)
+    function getUrl($code)
     {
         include "connection.php";
-        $result = pg_query($conn, $sql);
-        return $result;
+        $result = pg_query($conn, "SELECT * FROM urls WHERE code = '$code'");
+        $result = pg_fetch_assoc($result);
+        return $result['longurl'][0] ?? false;
     }
 
-    function fetch_assoc($sql)
+    function loginUser($email, $password)
     {
-        $res = exec_query($sql);
-        return pg_fetch_assoc($res);
+        include "connection.php";
+        if($result = pg_query($conn, "SELECT * FROM users WHERE email = '$email'"))
+        {
+            $user = pg_fetch_assoc($result);
+            if($user['pwd_hash'] == hash("sha256", $password)){
+                session_start();
+                $_SESSION['email'] = $email;
+                header("Location: dashboard.php");
+            }else{
+                header("Location: login.php");
+            }
+        }
     }
 
-    function fetch_all($sql)
+    function signupUser($email, $password, $retyped_password, $username)
     {
-        $res = exec_query($sql);
-        return pg_fetch_all($res);
+        include "connection.php";
     }
 
 ?>
