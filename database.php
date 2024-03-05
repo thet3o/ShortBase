@@ -27,6 +27,18 @@
     function signupUser($email, $password, $retyped_password, $username)
     {
         include "connection.php";
+        $pwd_hash = hash("sha256", $password);
+        $repwd_hash = hash("sha256", $retyped_password);
+
+        if($pwd_hash == $repwd_hash)
+        {
+            if(pg_query($conn, "INSERT INTO users(email, pwd_hash, username) VALUES ('$email', '$pwd_hash', '$username')")){
+                echo 'Registrazione riuscita!';
+            }else{
+                echo 'Registrazione fallita';
+                header("Location: login.php");
+            }
+        }
     }
 
 ?>
