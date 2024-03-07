@@ -28,8 +28,9 @@
             <div class="mb-4">
                 <input type="password" name="password" placeholder="Password" required/>
             </div>
-            <div class="mb-4 flex justify-center">
+            <div class="mb-4 flex justify-center text-center">
                 <input type="submit" value="Login" class="rounded bg-amber-200 w-4/5"/>
+                <a href="signup.php" value="SignUp" class="rounded bg-amber-50 w-4/5">SignUp</a>
             </div>
         </form>
     </div>

@@ -16,6 +16,7 @@
             $user = pg_fetch_assoc($result);
             if($user['pwd_hash'] == hash("sha256", $password)){
                 $_SESSION['email'] = $email;
+                $_SESSION['username'] = $user['username'];
                 header("Location: dashboard.php");
                 echo "works";
             }else{
@@ -37,6 +38,20 @@
             }else{
                 echo 'Registrazione fallita';
                 header("Location: login.php");
+            }
+        }
+    }
+
+    function getUrlsOfUser($email)
+    {
+        include "connection.php";
+        if($result = pg_query($conn, "SELECT urls.code, long_url, visit_counter FROM urls, users WHERE urls.user = users.id AND users.email = '$email'"))
+        {
+            if(count(pg_fetch_all($result)) > 0)
+            {
+                return pg_fetch_all($result);
+            }else{
+                return false;
             }
         }
     }
