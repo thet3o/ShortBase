@@ -56,4 +56,40 @@
         }
     }
 
+    function get_user($email)
+    {
+        include "connection.php";
+        if($result = pg_query($conn, "SELECT id, email, username FROM users WHERE email = '$email'"))
+        {
+            return pg_fetch_assoc($result);
+        }
+    }
+
+    function generate_url_code($length)
+    {
+        include "connection.php";
+        $code = bin2hex(random_bytes($length));
+        while(pg_fetch_assoc(pg_query($conn, "SELECT code FROM urls WHERE code = '$code'")))
+        {
+            $code = bin2hex(random_bytes($length));
+        }
+        return $code;
+    }
+
+    function createShortUrl($long_url, $user_id, $code_length)
+    {
+        include "connection.php";
+
+        $code = generate_url_code($code_length);
+
+        var_dump($code);
+
+        if(pg_query($conn, "INSERT INTO urls(code, long_url, user) VALUES ($code, $long_url, $user_id)"))
+        {
+            header("Location: dashboard.php");
+        }else{
+            echo "Errore nella crezione dell'url";
+        }
+    }
+
 ?>
