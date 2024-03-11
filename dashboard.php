@@ -6,9 +6,9 @@ if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
     header("Location: login.php");
 }
 
-if(isset($_POST['long:url']))
+if(isset($_POST['long_url']))
 {
-    createShortUrl($_POST['long:url'], get_user($_SESSION['email'])['id'], 5);
+    createShortUrl($_POST['long_url'], get_user($_SESSION['email'])['id'], 2);
 }
 
 ?>

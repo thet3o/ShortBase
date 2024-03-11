@@ -3,12 +3,12 @@
     if(isset($_SERVER['REQUEST_URI']) && $_SERVER['REQUEST_URI'] != "/" && $_SERVER['REQUEST_URI'] != "/login.php" && $_SERVER['REQUEST_URI'] != "/signup.php" && $_SERVER['REQUEST_URI'] != "/dashboard.php")
     {
         include 'database.php';
-        $res = getUrl(substr($_SERVER['REQUEST_URI'], 0, 0));
-        if(!$res)
+        $res = getLongUrlByCode(substr($_SERVER['REQUEST_URI'], 1));
+        if($res)
         {
             header("Location: $res");
         }else{
-            echo "N";
+            header("Location: /");
         }
     }else{
         session_start();

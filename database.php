@@ -1,13 +1,5 @@
 <?php
 
-    function getUrl($code)
-    {
-        include "connection.php";
-        $result = pg_query($conn, "SELECT * FROM urls WHERE code = '$code'");
-        $result = pg_fetch_assoc($result);
-        return $result['longurl'][0] ?? false;
-    }
-
     function loginUser($email, $password)
     {
         include "connection.php";
@@ -45,7 +37,7 @@
     function getUrlsOfUser($email)
     {
         include "connection.php";
-        if($result = pg_query($conn, "SELECT urls.code, long_url, visit_counter FROM urls, users WHERE urls.user = users.id AND users.email = '$email'"))
+        if($result = pg_query($conn, "SELECT urls.code, long_url, visit_counter FROM urls, users WHERE urls.user_id = users.id AND users.email = '$email'"))
         {
             if(count(pg_fetch_all($result)) > 0)
             {
@@ -82,13 +74,36 @@
 
         $code = generate_url_code($code_length);
 
-        var_dump($code);
+        var_dump($user_id);
 
-        if(pg_query($conn, "INSERT INTO urls(code, long_url, user) VALUES ($code, $long_url, $user_id)"))
+        $user_id = intval($user_id);
+
+        $query = "INSERT INTO urls(code, long_url, user_id) VALUES ($1, $2, $3)";
+        $values = array($code, $long_url, $user_id);
+
+        if(pg_query_params($conn, $query, $values))
         {
             header("Location: dashboard.php");
         }else{
             echo "Errore nella crezione dell'url";
+        }
+    }
+
+    function getLongUrlByCode($code)
+    {
+        include "connection.php";
+
+        if($result = pg_query($conn, "SELECT long_url FROM urls WHERE code = '$code'"))
+        {
+            var_dump($result);
+            if($url = pg_fetch_assoc($result))
+            {
+                return $url['long_url'];
+            }else{
+                return false;
+            }
+        }else{
+            return false;
         }
     }
 
