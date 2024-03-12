@@ -1,5 +1,6 @@
 <?php
 
+    // Login the user
     function loginUser($email, $password)
     {
         include "connection.php";
@@ -10,13 +11,13 @@
                 $_SESSION['email'] = $email;
                 $_SESSION['username'] = $user['username'];
                 header("Location: dashboard.php");
-                echo "works";
             }else{
                 header("Location: login.php");
             }
         }
     }
 
+    // Register the new user
     function signupUser($email, $password, $retyped_password, $username)
     {
         include "connection.php";
@@ -26,6 +27,7 @@
         if($pwd_hash == $repwd_hash)
         {
             if(pg_query($conn, "INSERT INTO users(email, pwd_hash, username) VALUES ('$email', '$pwd_hash', '$username')")){
+                header("Location: login.php");
                 echo 'Registrazione riuscita!';
             }else{
                 echo 'Registrazione fallita';
@@ -57,6 +59,7 @@
         }
     }
 
+    // Create the code for the url inserted, the length of the code can change
     function generate_url_code($length)
     {
         include "connection.php";
@@ -68,6 +71,7 @@
         return $code;
     }
 
+    
     function createShortUrl($long_url, $user_id, $code_length)
     {
         include "connection.php";
@@ -89,16 +93,24 @@
         }
     }
 
+    // Get url from the code given by $_SERVER["URI_REQUEST"]
     function getLongUrlByCode($code)
     {
         include "connection.php";
 
-        if($result = pg_query($conn, "SELECT long_url FROM urls WHERE code = '$code'"))
+        if($result = pg_query($conn, "SELECT long_url, visit_counter FROM urls WHERE code = '$code'"))
         {
-            var_dump($result);
             if($url = pg_fetch_assoc($result))
             {
-                return $url['long_url'];
+
+                $updated_visit_counter = $url['visit_counter'] + 1;
+                // Before return the url, update visit counter
+                if(pg_query($conn, "UPDATE urls SET visit_counter = $updated_visit_counter WHERE code = '$code'"))
+                {
+                    return $url['long_url'];
+                }else{
+                    return false;
+                }
             }else{
                 return false;
             }
