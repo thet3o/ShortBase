@@ -1,25 +1,20 @@
 <?php
 
-    if (isset($_POST['long_url'])) {
-        $link = $_POST['long_url'];
-        $cookie_content = $saved_link;
-        $saved_link = [];
-        if (isset($_cookie[$cookie_content])){
-            $saved_link = json_decode($_cookie[$cookie_content], true);
-        }
-        $saved_link[]=$link;
-        setcookie($cookie_content, json_encode($saved_link), time() + (3600), "/");
+if (isset($_POST['long_url'])) {
+    $long_url = $_POST['long_url'];
+    $cookie_content = 'saved_links'; // Set a consistent name for the cookie
+    $saved_links = [];
+
+    if (isset($_COOKIE[$cookie_content])) {
+        $saved_links = json_decode($_COOKIE[$cookie_content], true);
     }
-    if(isset($_cookie['saved_link'])){
-        $saved_link = json_decode($_cookie[$cookie_content], true);
-        echo "<h2>Link salvati:</h2>";
-        echo "<ul>";
-        foreach ($saved_link as $link){
-            echo "<li><a href='$link'>$link</a></li>";
-    }
-    echo "</ul>";
+
+    $saved_links[] = $long_url;
+    setcookie($cookie_content, json_encode($saved_links), time() + (3600), "/"); // Save the updated list of links in the cookie
 }
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,11 +23,24 @@
     <title>Link saver</title>
 </head>
 <body>
-    <h1>save your link:</h1>
+    <h1>Save your link:</h1>
     <form method="post">
-    <label for="link">Inserisci il tuo link:</label><br>
-    <input type="text" id="link" name="link" required><br>
-    <input type="submit" value="save">
-</form>
+        <label for="long_url">Inserisci il tuo link:</label><br>
+        <input type="text" id="long_url" name="long_url" required><br>
+        <input type="submit" value="Save">
+    </form>
+
+<?php
+if(isset($_COOKIE['saved_links'])){
+    $saved_links = json_decode($_COOKIE[$cookie_content], true);
+    echo "<h2>Link salvati:</h2>";
+    echo "<ul>";
+    foreach ($saved_links as $link){
+        echo "<li><a href='$link'>$link</a></li>";
+    }
+    echo "</ul>";
+}
+?>
+
 </body>
 </html>
