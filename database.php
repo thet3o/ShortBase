@@ -26,7 +26,7 @@
 
         if($pwd_hash == $repwd_hash)
         {
-            if(pg_query($conn, "INSERT INTO users(email, pwd_hash, username) VALUES ('$email', '$pwd_hash', '$username')")){
+            if(pg_query($conn, "INSERT INTO users(email, pwd_hash, username, plan) VALUES ('$email', '$pwd_hash', '$username', '1')")){
                 header("Location: login.php");
                 echo 'Registrazione riuscita!';
             }else{
@@ -50,10 +50,10 @@
         }
     }
 
-    function get_user($email)
+    function getUser($email)
     {
         include "connection.php";
-        if($result = pg_query($conn, "SELECT id, email, username FROM users WHERE email = '$email'"))
+        if($result = pg_query($conn, "SELECT id, email, username, plan FROM users WHERE email = '$email'"))
         {
             return pg_fetch_assoc($result);
         }
@@ -114,6 +114,48 @@
             }else{
                 return false;
             }
+        }else{
+            return false;
+        }
+    }
+
+
+    function getUserPlan($plan_id){
+        include "connection.php";
+        if($result = pg_query($conn, "SELECT * FROM plans WHERE plans.id = '$plan_id'")){
+            if($record = pg_fetch_assoc($result)){
+                return $record;
+            }
+        }
+    }
+
+
+    function getPlans()
+    {
+        include "connection.php";
+
+        if($result = pg_query($conn, "SELECT * FROM plans WHERE id != 2")){
+            if($records = pg_fetch_all($result)){
+                return $records;
+            }
+        }
+
+    }
+
+    function deleteUrl($code){
+        include "connection.php";
+        if(pg_delete($conn, "urls", array('code'=>$code))){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    function changePlan($user_id, $plan_id){
+        include "connection.php";
+        $sql = "UPDATE users SET plan=$plan_id WHERE id=$user_id";
+        if(pg_query($conn, $sql)){
+            return true;
         }else{
             return false;
         }
