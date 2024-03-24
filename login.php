@@ -1,6 +1,7 @@
 <?php
 
     include "database.php";
+    include "cookie.php";
 
     session_start();
     session_unset();
