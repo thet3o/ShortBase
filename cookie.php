@@ -1,46 +1,14 @@
 <?php
-
-if (isset($_POST['long_url'])) {
-    $long_url = $_POST['long_url'];
-    $cookie_content = 'saved_links'; // Set a consistent name for the cookie
-    $saved_links = [];
-
-    if (isset($_COOKIE[$cookie_content])) {
-        $saved_links = json_decode($_COOKIE[$cookie_content], true);
+    // Includi il file di funzioni del database
+    include "database.php";
+    // Controlla se l'utente ha effettuato l'accesso
+    session_start();
+    if (isset($_SESSION['email'])) {
+        // Ottieni l'ultima email utilizzata per l'accesso
+        $lastEmail = $_SESSION['email'];
+        // Imposta il cookie con l'ultima email utilizzata
+        setcookie('last_email', $lastEmail, time() + 3600, '/'); // Il cookie scadrà dopo un'ora
+        // Aggiorna l'ultima email utilizzata nel cookie
+        $_COOKIE['last_email'] = $lastEmail;
     }
-
-    $saved_links[] = $long_url;
-    setcookie($cookie_content, json_encode($saved_links), time() + (3600), "/"); // Save the updated list of links in the cookie
-}
-
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link saver</title>
-</head>
-<body>
-    <h1>Save your link:</h1>
-    <form method="post">
-        <label for="long_url">Inserisci il tuo link:</label><br>
-        <input type="text" id="long_url" name="long_url" required><br>
-        <input type="submit" value="Save">
-    </form>
-
-<?php
-if(isset($_COOKIE['saved_links'])){
-    $saved_links = json_decode($_COOKIE[$cookie_content], true);
-    echo "<h2>Link salvati:</h2>";
-    echo "<ul>";
-    foreach ($saved_links as $link){
-        echo "<li><a href='$link'>$link</a></li>";
-    }
-    echo "</ul>";
-}
-?>
-
-</body>
-</html>
