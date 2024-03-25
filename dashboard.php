@@ -2,12 +2,14 @@
 session_start();
 include "database.php";
 
-if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
+if (!isset($_SESSION['email']) || empty($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
     header("Location: login.php");
 }
 
 $user = getUser($_SESSION['email']);
 $userPlan = getUserPlan($user['plan']);
+
+$latestLogins = getLatestLogin(25);
 
 if(isset($_POST['long_url']))
 {
@@ -119,6 +121,26 @@ if(isset($_POST['plans'])){
             </div>
         </div>
     </div>
+</body>
+<body>
+    <h1>Admin Dashboard - Ultimi accessi</h1>
+
+    <table border="1">
+        <tr>
+            <th>Email</th>
+            <th>Data/Ora Accesso</th>
+        </tr>
+        <?php foreach ($latestLogins as $login): ?>
+        <tr>
+            <td><?php echo $login['email']; ?></td>
+            <td><?php echo $login['login_time']; ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+
+    <br>
+
+    <a href="logout.php">Logout</a>
 </body>
 
 </html>
