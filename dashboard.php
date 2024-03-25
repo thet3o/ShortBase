@@ -31,6 +31,26 @@ if(isset($_POST['plans'])){
     }
 }
 
+
+// Funzione per ottenere gli ultimi accessi degli utenti
+function getLatestLogins($limit) {
+    include "connection.php";
+    $latestLogins = array();
+
+    // Eseguire la query per ottenere gli ultimi accessi
+    $query = "SELECT email, login_time FROM logins ORDER BY login_time DESC LIMIT $limit";
+    $result = pg_query($conn, $query);
+
+    if ($result) {
+        while ($row = pg_fetch_assoc($result)) {
+            $latestLogins[] = $row;
+        }
+    }
+
+    return $latestLogins;
+}
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
