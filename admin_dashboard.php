@@ -1,15 +1,22 @@
 <?php
 include "database.php";
 
+
+
 // Verifica se l'utente è autenticato e se è un amministratore
-if (!isset($_SESSION['email']) || empty($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['email']) || empty($_SESSION['email'])) { 
     header("Location: login.php");
     exit;
 }
 
-// Ottieni gli ultimi account che hanno effettuato l'autenticazione
-$latestLogins = getLatestLogins(25); // Esempio: ottieni gli ultimi 10 accessi
+$user = getUser($_SESSION['email']);
+$userPlan = getUserPlan($user['plan']);
 
+if ($userPlan['name'] != 'Administrator'){
+
+// Ottieni gli ultimi account che hanno effettuato l'autenticazione
+$latestLogins = getLatestLogins(25);
+}
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +44,6 @@ $latestLogins = getLatestLogins(25); // Esempio: ottieni gli ultimi 10 accessi
 
     <br>
 
-    <a href="logout.php">Logout</a>
+     <a href="logout.php">Logout</a>
 </body>
 </html>
