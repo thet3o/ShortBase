@@ -24,7 +24,7 @@
         <p class="text-3xl">ShortBase Login</p>
         <form method="post">
             <div class="mb-4">
-                <input type="text" name="email" placeholder="Email" value=<?php echo $_COOKIE["last_email"] ?? "" ?> required/>
+                <input type="text" name="email" placeholder="Email" required value=<?php echo $_COOKIE["last_email"] ?? "" ?> ></input>
             </div>
             <div class="mb-4">
                 <input type="password" name="password" placeholder="Password" required/>
