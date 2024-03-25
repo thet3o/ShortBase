@@ -37,6 +37,7 @@
         }
     }
 
+    // Get the urls of the logged user
     function getUrlsOfUser($email)
     {
         include "connection.php";
@@ -51,6 +52,7 @@
         }
     }
 
+    // Get user data
     function getUser($email)
     {
         include "connection.php";
@@ -72,7 +74,7 @@
         return $code;
     }
 
-    
+    // Create the code for the full url
     function createShortUrl($long_url, $user_id, $code_length)
     {
         include "connection.php";
@@ -121,6 +123,7 @@
     }
 
 
+    // Get the single plan data
     function getUserPlan($plan_id){
         include "connection.php";
         if($result = pg_query($conn, "SELECT * FROM plans WHERE plans.id = '$plan_id'")){
@@ -130,7 +133,7 @@
         }
     }
 
-
+    // Get all available plans, but not the Administrator
     function getPlans()
     {
         include "connection.php";
@@ -143,6 +146,7 @@
 
     }
 
+    // Delete the shorted url
     function deleteUrl($code){
         include "connection.php";
         if(pg_delete($conn, "urls", array('code'=>$code))){
@@ -152,6 +156,7 @@
         }
     }
 
+    // Change the user plan
     function changePlan($user_id, $plan_id){
         include "connection.php";
         $sql = "UPDATE users SET plan=$plan_id WHERE id=$user_id";
@@ -161,20 +166,22 @@
             return false;
         }
     }
+
+
+    // Get the last time when the all user logged
     function getLatestLogins($limit) {
-    include "connection.php";
-    $latestLogins = array();
+        include "connection.php";
+        $latestLogins = array();
 
-    // Eseguire la query per ottenere gli ultimi accessi
-    $query = "SELECT email, login_time FROM logins ORDER BY login_time DESC LIMIT $limit";
-    $result = pg_query($conn, $query);
+        // Eseguire la query per ottenere gli ultimi accessi
+        $query = "SELECT email, login_time FROM logins ORDER BY login_time DESC LIMIT $limit";
+        $result = pg_query($conn, $query);
 
-    if ($result) {
-        while ($row = pg_fetch_assoc($result)) {
-            $latestLogins[] = $row;
+        if ($result) {
+            while ($row = pg_fetch_assoc($result)) {
+                $latestLogins[] = $row;
+            }
         }
+        return $latestLogins;
     }
-
-    return $latestLogins;
-}
 ?>
