@@ -1,7 +1,7 @@
 <?php
 
     include "database.php";
-    include "cookie.php";
+    //include "cookie.php";
 
     session_start();
     session_unset();
@@ -24,7 +24,7 @@
         <p class="text-3xl">ShortBase Login</p>
         <form method="post">
             <div class="mb-4">
-                <input type="text" name="email" placeholder="Email" required/>
+                <input type="text" name="email" placeholder="Email" value=<?php echo $_COOKIE["last_email"] ?? "" ?> required/>
             </div>
             <div class="mb-4">
                 <input type="password" name="password" placeholder="Password" required/>

@@ -10,6 +10,7 @@
             if($user['pwd_hash'] == hash("sha256", $password)){
                 $_SESSION['email'] = $email;
                 $_SESSION['username'] = $user['username'];
+                setcookie('last_email', $email, time() + 3600, '/'); 
                 header("Location: dashboard.php");
             }else{
                 header("Location: login.php");
