@@ -100,6 +100,7 @@ if(isset($_POST['plans'])){
                         </div>
                     </div>
                 </div>
+                <a href="login.php" class="rounded bg-orange-400">Logout</a>
             </div>
             <form method="post" class="w-11/12 h-3/5 grid grid-cols-3 gap-3">
                 <input type="text" name="long_url" placeholder="Inserisci l'URL da ridurre" class="col-span-2 rounded" />
