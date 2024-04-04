@@ -2,6 +2,9 @@
 session_start();
 include "database.php";
 
+// Elimina cookie se pre esistente
+setcookie("signup", "", time() - (3600));
+
 if (!isset($_SESSION['email']) || empty($_SESSION['email'])) {
     header("Location: login.php");
 }

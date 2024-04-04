@@ -17,10 +17,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <title>ShortBase</title>
 </head>
 <body>
     <div class="h-screen flex flex-col justify-center items-center bg-amber-100 gap-2">
+        <?php
+            if(isset($_COOKIE['signup']) && $_COOKIE['signup'] === 'true'){
+                echo '<div class="p-4 mb-4 text-sm font-bold text-green-500 rounded-lg bg-green-100" role="alert">
+                <span class="font-medium">Registrazione andata a buon fine!</span>
+              </div>';            
+            }
+        ?>
         <p class="text-3xl">ShortBase Login</p>
         <form method="post">
             <div class="mb-4">

@@ -28,11 +28,9 @@
         if($pwd_hash == $repwd_hash)
         {
             if(pg_query($conn, "INSERT INTO users(email, pwd_hash, username, plan) VALUES ('$email', '$pwd_hash', '$username', '1')")){
-                header("Location: login.php");
-                echo 'Registrazione riuscita!';
+                return true;
             }else{
-                echo 'Registrazione fallita';
-                header("Location: login.php");
+                return false;
             }
         }
     }
